@@ -1,8 +1,3 @@
-Flask Mailhide
-==============
-
-Get your reCAPTCHA api from https://www.google.com/recaptcha
-
 # Flask Mailhide
 
 A replacement of Google's [Mailhide](https://www.google.com/recaptcha/mailhide/d) (deprecated due to the shutdown of reCAPTCHA v1) using [reCAPTCHA](https://developers.google.com/recaptcha/intro) v2. 

@@ -14,7 +14,6 @@ def verify(response, client_ip):
 	payload = {"secret":captcha_secret_key,
 		"response":response,
 		"remoteip":client_ip}
-	#"https://www.recaptcha.net/recaptcha/api/siteverify?secret=".$secretKey."&response=".$captcha."&remoteip=".$ip
 	r = requests.get(recaptcha_url, params=payload)
 	r_data = r.json()
 	return r_data["success"]
