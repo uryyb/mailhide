@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mailhide v2.x</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src='https://www.recaptcha.net/recaptcha/api.js'></script>
+</head>
+<body>
+	<h1>Mailhide</h1>
+	<form id="show_email" action="/validate" method="post">
+      <div class="g-recaptcha" data-sitekey="<site_key>"></div>		
+      <input type="submit" name="submit" value="Reveal email address"><br><br>
+    </form>
+    <p>Made by <a href="https://uryyb.net">hello</a></p>
+</body>
+</html>
