@@ -1,39 +1,27 @@
 from flask import Flask, render_template, request, jsonify, \
                     redirect, Response, url_for, abort
-import requests
+import helpers
+
+config_dic = helpers.load_config()
 
 # flask app setup
 app = Flask(__name__)
-app.secret_key = "update_me"
+app.secret_key = config_dic["app_secret_key"]
 
-captcha_keys = {
-	"public_key": "<public_key>",
-	"private_key": "<private_key>"
-}
-hidden_address = "email@example.com"
-recaptcha_url = "https://www.recaptcha.net/recaptcha/api/siteverify"
-
-def verify(response, client_ip):
-	payload = {"secret":captcha_keys['private_key'],
-		"response":response,
-		"remoteip":client_ip}
-	r = requests.get(recaptcha_url, params=payload)
-	r_data = r.json()
-	return r_data["success"]
 
 @app.route("/", methods=["GET"])
 def home():
-    return render_template("home.html", public_key=captcha_keys["public_key"])
+    return render_template("home.html", public_key=config_dic["captcha_public_key"])
 
 @app.route("/validate", methods=["POST"])
 def validate():
 	data = None
 	client_ip = request.remote_addr
 	captcha_response = request.form['g-recaptcha-response']
-	if verify(captcha_response, client_ip):
+	if helpers.verify(config_dic["captcha_private_key"], captcha_response, client_ip):
 		data = {"status":True,
 			"msg":"Here's the email you were looking for",
-			"email":hidden_address}
+			"email":config_dic["hidden_address"]}
 	else:
 		data = {"status":False,
 			"msg":"reCAPTCHA test failed."}
@@ -44,10 +32,10 @@ def ajax_validate():
 	data = None
 	client_ip = request.remote_addr
 	captcha_response = request.form['g-recaptcha-response']
-	if verify(captcha_response, client_ip):
+	if helpers.verify(config_dic["captcha_private_key"], captcha_response, client_ip):
 		data = {"status":True,
 			"msg":"Here's the email you were looking for",
-			"email":hidden_address}
+			"email":config_dic["hidden_address"]}
 	else:
 		data = {"status":False,
 			"msg":"reCAPTCHA test failed."}
