@@ -31,7 +31,7 @@
 		  			console.log('Status: '+ data['status']);
 		  			if (data['status']) {
 		  				$('#show_email').hide();
-		  				$('#display_email').html(data['msg'] + " " + <a href=\"mailto:"+data['email']+"\'>"+data['email']+"</a>");
+		  				$('#display_email').html(data['msg'] + " <a href=\"mailto:"+data['email']+"\">"+data['email']+"</a>");
 		  			} else {
 		  				$('#resp_msg').text(data['msg']);
 		  			}
