@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+My account
+{% endblock %}
+
+{% block page_title %}
+My account
+{% endblock %}
+
+{% block content %}
+<!-- placeholder content -->
+<p>Hello, {{ current_user.name }}</p>
+<p>
+Your emails addresses and hashes
+</p>
+{% endblock %}
+
+{% block footer %}
+mailhide app by <a href="https://uryyb.net">bmcculley</a>.
+{% endblock %}

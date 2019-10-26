@@ -24,7 +24,8 @@
 		  		url : '/_validate',
 		  		type : 'POST',
 		  		data : {
-		  			'g-recaptcha-response' : $('#g-recaptcha-response').val()
+		  			'g-recaptcha-response' : $('#g-recaptcha-response').val(),
+		  			'hashkey' : {{hashkey}}
 		  		},
 		  		dataType:'json',
 		  		success : function(data) {
