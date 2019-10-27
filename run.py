@@ -1,4 +1,4 @@
-from loginapp import app
+from mailhide import app
 
 
 if __name__ == "__main__":

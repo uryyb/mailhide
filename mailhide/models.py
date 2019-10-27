@@ -1,4 +1,4 @@
-from mailhide import db
+from mailhide import db, helpers
 import bcrypt
 
 # the user table structure 
@@ -20,9 +20,17 @@ class Emails(db.Model):
 def setup_db():
     db.create_all()
     user_dict = {
-        "admin" : DBUser(username="admin", email="admin@example.com", password=bcrypt.hashpw(b"abc123", bcrypt.gensalt())),
-        "guest" : DBUser(username="guest", email="guest@example.com", password=bcrypt.hashpw(b"password", bcrypt.gensalt()))}
+        "admin": DBUser(username="admin", email="admin@example.com", password=bcrypt.hashpw(b"abc123", bcrypt.gensalt())),
+        "guest": DBUser(username="guest", email="guest@example.com", password=bcrypt.hashpw(b"password", bcrypt.gensalt()))
+    }
+    email_dict = {
+        "email": Emails(email="email@example.com", email_hash=helpers.hash_email("email@example.com")),
+        "jsmith": Emails(email="jsmith@example.com", email_hash=helpers.hash_email("jsmith@example.com"))
+    }
     for key, user in user_dict.items():
         print("%s added to the database."% user.username)
         db.session.add(user)
+    for key, email in email_dict.items():
+        print("%s added to the database."% email.email)
+        db.session.add(email)
     db.session.commit()

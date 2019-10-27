@@ -13,3 +13,5 @@ six
 SQLAlchemy
 Werkzeug
 WTForms
+requests
+PyYAML

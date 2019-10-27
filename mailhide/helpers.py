@@ -1,9 +1,14 @@
 import requests
 import yaml
+import hashlib
 
 def load_config(filname="config.yaml"):
 	stream = open(filname, 'r')
 	return yaml.load(stream, Loader=yaml.FullLoader)
+
+def hash_email(addr):
+	# need to enable handling collisions
+	return hashlib.sha1(addr.encode()).hexdigest()
 
 def verify(private_key, response, client_ip):
 	recaptcha_url = "https://www.recaptcha.net/recaptcha/api/siteverify"

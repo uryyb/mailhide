@@ -1,15 +1,15 @@
 {% extends "login_base.html" %}
 
 {% block title %}
-App Login
+Mailhide Login
 {% endblock %}
 
 {% block page_title %}
-App Login
+Mailhide Login
 {% endblock %}
 
 {% block content %}
-<form action="" method="post">
+<form action="{{ url_for('login') }}" method="post">
 	{{ form.csrf_token }}
 	{{ form.username.label }}<br/>
     {{ form.username(placeholder="Username") }}<br/>
@@ -17,8 +17,4 @@ App Login
     {{ form.password(placeholder="Password") }}<br/>
     {{ form.submit }}<br/>
 </form>
-{% endblock %}
-
-{% block footer %}
-Flask login example app by <a href="http://bmcculley.github.io">bmcculley</a>.
 {% endblock %}

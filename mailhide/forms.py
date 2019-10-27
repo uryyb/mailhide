@@ -24,3 +24,7 @@ class RegistForm(FlaskForm):
         validators.DataRequired()
         ])
     submit = SubmitField("Register")
+
+class HideMailForm(FlaskForm):
+    address = StringField("Email Address", validators=[validators.DataRequired()])
+    submit = SubmitField("Hide it")

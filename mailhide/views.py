@@ -1,11 +1,11 @@
 from flask import escape, render_template, request, flash, \
-                    redirect, Response, url_for, abort
+                    redirect, Response, url_for, abort, jsonify
 from flask_login import UserMixin, current_user, \
                             login_required, login_user, logout_user
 from urllib.parse import urlparse, urljoin
 from mailhide import app, config_dic, db, login_manager, logger
-from mailhide.forms import LoginForm, RegistForm
-from mailhide import models
+from mailhide.forms import LoginForm, RegistForm, HideMailForm
+from mailhide import helpers, models
 import bcrypt
 
 # the user model (flask login)
@@ -32,7 +32,34 @@ def is_safe_url(target):
 
 @app.route("/", methods=["GET"])
 def home():
-    return render_template("home.html")
+    print(config_dic['host'])
+    if config_dic['debug']:
+        host_domain = config_dic['host'] + ':' + str(config_dic['port'])
+    else:
+        host_domain = config_dic['host']
+    form = HideMailForm(request.form)
+    return render_template("home.html", form=form, host_domain=host_domain)
+
+@app.route("/_hide_address", methods=["POST"])
+def ajax_hide_address():
+    form = HideMailForm(request.form)
+    if request.method == "POST" and form.validate():
+        hv = helpers.hash_email(form.address.data)
+        email_addr = form.address.data
+        try:
+            addr = models.Emails(email=email_addr, email_hash=hv)
+            db.session.add(addr)
+            db.session.commit()
+            elst = email_addr.split("@")
+            if len(elst[0]) > 2:
+                de = elst[0][0] + "...@" + elst[1]
+            else:
+                de = "...@" + elst[1]
+            return jsonify({'msg':'congrats', 'hash':hv, 'addr':de })
+        except:
+            return jsonify({'msg':'uh oh! something went wrong.'})
+    return jsonify({'msg':'uh oh! something went wrong.'})
+
 
 @app.route("/h/<hashkey>", methods=["GET"])
 def hidden(hashkey):
@@ -120,10 +147,16 @@ def validate():
     data = None
     client_ip = request.remote_addr
     captcha_response = request.form['g-recaptcha-response']
+    hashkey = request.form['hashkey']
     if helpers.verify(config_dic["captcha_private_key"], captcha_response, client_ip):
+        #hide just a single address for now
+        if "hidden_address" in config_dic:
+            hidden_address = config_dic["hidden_address"]
+        else:
+            hidden_address = models.Emails.query.filter_by(email_hash=hashkey).first().email
         data = {"status":True,
             "msg":"Here's the email you were looking for",
-            "email":config_dic["hidden_address"]}
+            "email":hidden_address}
     else:
         data = {"status":False,
             "msg":"reCAPTCHA test failed."}
@@ -131,16 +164,17 @@ def validate():
 
 @app.route("/_validate", methods=["POST"])
 def ajax_validate():
+    # need to validate and make sure form data is safe
     data = None
     client_ip = request.remote_addr
     captcha_response = request.form['g-recaptcha-response']
     hashkey = request.form['hashkey']
     if helpers.verify(config_dic["captcha_private_key"], captcha_response, client_ip):
         #hide just a single address for now
-        if "hidden_address" in config_dic["hidden_address"]:
+        if "hidden_address" in config_dic:
             hidden_address = config_dic["hidden_address"]
         else:
-            hidden_address = models.Emails.query.filter_by(email_hash=hashkey).first()
+            hidden_address = models.Emails.query.filter_by(email_hash=hashkey).first().email
         data = {"status":True,
             "msg":"Here's the email you were looking for",
             "email":hidden_address}

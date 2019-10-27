@@ -14,7 +14,7 @@
         <h1 class="site-title">{% block page_title %}{% endblock %}</h1>
         <ul class="menu">
             {% if request.path == "/" %}
-            <li><a href="/secret">The protected page</a></li>
+            
             {% else %}
             <li><a href="/">Home</a></li>
             {% endif %}
@@ -22,6 +22,9 @@
             <li><a href="/login">Login</a></li>
             <li><a href="/register">Register</a></li>
             {% else %}
+              {% if request.path != "/account" %}
+                <li><a href="/account">Account</a></li>
+              {% endif %}
             <li><a href="/logout">Logout</a></li>
             {% endif %}
         </ul>

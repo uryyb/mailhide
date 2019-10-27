@@ -131,6 +131,10 @@ label {
     color: #888;
 }
 
+.hidden {
+    display: none;
+}
+
 /*
  * Clearfix: contain floats
  *

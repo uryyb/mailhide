@@ -23,7 +23,7 @@ logger.addHandler(f_handler)
 
 # flask app setup
 app = Flask("mailhide")
-app.secret_key = config_dic["secret_key"]
+app.secret_key = config_dic["app_secret_key"]
 app.config["DEBUG"] = config_dic["debug"]
 app.config["HOST"] = config_dic["host"]
 app.config["PORT"] = config_dic["port"]
