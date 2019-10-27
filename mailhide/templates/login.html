@@ -1,0 +1,20 @@
+{% extends "login_base.html" %}
+
+{% block title %}
+Mailhide Login
+{% endblock %}
+
+{% block page_title %}
+Mailhide Login
+{% endblock %}
+
+{% block content %}
+<form action="{{ url_for('login') }}" method="post">
+	{{ form.csrf_token }}
+	{{ form.username.label }}<br/>
+    {{ form.username(placeholder="Username") }}<br/>
+    {{ form.password.label }}<br/>
+    {{ form.password(placeholder="Password") }}<br/>
+    {{ form.submit }}<br/>
+</form>
+{% endblock %}

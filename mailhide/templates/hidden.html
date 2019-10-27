@@ -7,13 +7,15 @@
 	<script src='https://www.recaptcha.net/recaptcha/api.js'></script>
 </head>
 <body>
-	<h1>Mailhide</h1>
-	<span id="resp_msg"></span>
-	<form id="show_email" action="/validate" method="post">
-      <div class="g-recaptcha" data-sitekey="{{public_key}}"></div>		
-      <input type="submit" name="submit" value="Reveal email address"><br><br>
-    </form>
-    <div id="display_email"></div>
+	<fieldset>
+		<legend>Solve to reveal the email address</legend>
+		<span id="resp_msg"></span>
+		<form id="show_email" action="/validate" method="post">
+	      <div class="g-recaptcha" data-sitekey="{{public_key}}"></div>		
+	      <input type="submit" name="submit" value="Reveal email address"><br><br>
+	    </form>
+	    <div id="display_email"></div>
+	</fieldset>
     <p>Made by <a href="https://uryyb.net">hello</a></p>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script type="text/javascript">
@@ -24,7 +26,8 @@
 		  		url : '/_validate',
 		  		type : 'POST',
 		  		data : {
-		  			'g-recaptcha-response' : $('#g-recaptcha-response').val()
+		  			'g-recaptcha-response' : $('#g-recaptcha-response').val(),
+		  			'hashkey' : '{{hashkey}}'
 		  		},
 		  		dataType:'json',
 		  		success : function(data) {

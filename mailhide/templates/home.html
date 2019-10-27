@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+Hide your email address | Mailhide
+{% endblock %}
+
+{% block page_title %}
+Mailhide
+{% endblock %}
+
+{% block content %}
+<p id="header-text">Hide your email address now, just enter it below for your custom url.</p>
+<form action="" id="hide-address" method="post">
+	{{ form.csrf_token }}
+	{{ form.address.label }}:<br/>
+    {{ form.address(placeholder="email@example.com") }}<br/>
+    {{ form.submit }}<br/>
+</form>
+<div id="url-holder" class="hidden">
+	<p>Nice work! Let's keep a step ahead of the spammers. Here's your info:</p>
+	<label for="url">This is your hidden email url:</label>
+	<input type="text" id="url">
+</div>
+<div id="code-holder" class="hidden">
+	<p>This is an example link that opens a small window with your hidden address</p>
+	<span id="code"></span>
+</div>
+{% endblock %}
+
+{% block footer %}
+mailhide app by <a href="https://uryyb.net">bmcculley</a>.
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    	$(function() {
+    		console.log('ready!');
+
+    		$('#hide-address').submit(function(e){
+    			e.preventDefault();
+				$.ajax({
+				    type: 'POST',
+				    url: '/_hide_address',
+				    data: $('#hide-address').serialize(),
+				    dataType: 'json',
+				    success: function(data) {
+				    	var key = data.hash;
+				    	var addr = data.addr;
+				    	var cpy_code = `<a href="//{{host_domain}}/h/${key}" onclick="window.open('//{{host_domain}}/h/${key}', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">${addr}</a>`;
+				    	$('#url').val('https://{{host_domain}}/h/'+key);
+				    	$('#url-holder').toggleClass('hidden');
+				    	$('#code').html(cpy_code);
+				    	$('#code-holder').toggleClass('hidden');
+				    	$('#hide-address').toggleClass('hidden');
+				    	$('#header-text').toggleClass('hidden');
+				    },
+				    error: function() {
+				        console.log('something went wrong.');
+				    }
+				});
+    		});
+    	});
+    </script>
+{% endblock %}

@@ -1,4 +1,13 @@
+debug: True
+host: "127.0.0.1"
+port: 5000
 app_secret_key: "update_me"
-captcha_public_key: "<public_key>"
-captcha_private_key: "<private_key>"
-hidden_address: "email@example.com"
+sqlalchemy_track_modifications: False
+sqlalchemy_database_uri: "sqlite:///users.db"
+log_file: "mailhide.log"
+log_level: "NOTSET"
+
+captcha_public_key: "public_key"
+captcha_private_key: "private_key"
+# uncomment hidden_address to just hide one address.
+#hidden_address: "email@example.com"
