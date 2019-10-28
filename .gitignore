@@ -112,3 +112,6 @@ venv.bak/
 # VS Code ignores
 .vscode/
 *.workspace
+
+# Config files
+*.yaml
