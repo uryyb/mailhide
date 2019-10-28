@@ -47,14 +47,21 @@ def ajax_hide_address():
         hv = helpers.hash_email(form.address.data)
         email_addr = form.address.data
         try:
-            addr = models.Emails(email=email_addr, email_hash=hv)
-            db.session.add(addr)
-            db.session.commit()
+            # should move this to it's own function
             elst = email_addr.split("@")
             if len(elst[0]) > 2:
                 de = elst[0][0] + "...@" + elst[1]
             else:
                 de = "...@" + elst[1]
+
+            hidden_address = models.Emails.query.filter_by(email_hash=hv).first()
+            if hidden_address is not None:
+                return jsonify({'msg':'congrats', 
+                        'hash':hidden_address.email_hash, 'addr':de })
+            addr = models.Emails(email=email_addr, email_hash=hv)
+            db.session.add(addr)
+            db.session.commit()
+            
             return jsonify({'msg':'congrats', 'hash':hv, 'addr':de })
         except:
             return jsonify({'msg':'uh oh! something went wrong.'})
