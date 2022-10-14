@@ -12,8 +12,28 @@ My account
 <!-- placeholder content -->
 <p>Hello, {{ current_user.name }}</p>
 <p>
+{% if hidden_addresses %}
 Your email address(es) and their hash values.
+<table>
+	<thead>
+		<th>Email</th>
+		<th>Hash</th>
+	</thead>
+	<tbody>
+
+{% for address in hidden_addresses %}
+	<tr>
+		<td>{{address.email}}</td>
+		<td>{{address.email_hash}}</td>
+	</tr>
+{% endfor %}
+</tbody>
+</table>
 </p>
+{% else %}
+<a href="/">Add some addresses</a>
+{% endif %}
+
 {% endblock %}
 
 {% block footer %}

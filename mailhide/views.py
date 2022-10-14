@@ -32,11 +32,10 @@ def is_safe_url(target):
 
 @app.route("/", methods=["GET"])
 def home():
-    print(config_dic['host'])
     if config_dic['debug']:
-        host_domain = config_dic['host'] + ':' + str(config_dic['port'])
+        host_domain = config_dic['external_host'] + ':' + str(config_dic['external_port'])
     else:
-        host_domain = config_dic['host']
+        host_domain = config_dic['external_host']
     form = HideMailForm(request.form)
     return render_template("home.html", form=form, host_domain=host_domain)
 
@@ -58,7 +57,7 @@ def ajax_hide_address():
             if hidden_address is not None:
                 return jsonify({'msg':'congrats', 
                         'hash':hidden_address.email_hash, 'addr':de })
-            addr = models.Emails(email=email_addr, email_hash=hv)
+            addr = models.Emails(db_user_id=current_user.id, email=email_addr, email_hash=hv)
             db.session.add(addr)
             db.session.commit()
             
@@ -79,7 +78,8 @@ def hidden(hashkey):
 @app.route("/account")
 @login_required
 def account():
-    return render_template("account.html")
+    hidden_addresses = models.Emails.query.filter_by(db_user_id=current_user.id).all()
+    return render_template("account.html", hidden_addresses=hidden_addresses)
 
 
 # register here
