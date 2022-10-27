@@ -28,7 +28,7 @@ def is_safe_url(target):
     test_url = urlparse(urljoin(request.host_url, target))
     return test_url.scheme in ("http", "https") and \
            ref_url.netloc == test_url.netloc
-           
+
 
 @app.route("/", methods=["GET"])
 def home():
@@ -46,12 +46,7 @@ def ajax_hide_address():
         hv = helpers.hash_email(form.address.data)
         email_addr = form.address.data
         try:
-            # should move this to it's own function
-            elst = email_addr.split("@")
-            if len(elst[0]) > 2:
-                de = elst[0][0] + "...@" + elst[1]
-            else:
-                de = "...@" + elst[1]
+            de = helpers.obfuscate_email(email_addr)
 
             hidden_address = models.Emails.query.filter_by(email_hash=hv).first()
             if hidden_address is not None:
@@ -74,12 +69,23 @@ def hidden(hashkey):
                 hashkey=hashkey)
 
 
-# an example protected url
 @app.route("/account")
 @login_required
 def account():
     hidden_addresses = models.Emails.query.filter_by(db_user_id=current_user.id).all()
     return render_template("account.html", hidden_addresses=hidden_addresses)
+
+
+@app.route("/recover-link/<hashkey>", methods=["GET"])
+@login_required
+def recoverlink(hashkey):
+    if config_dic['debug']:
+        host_domain = config_dic['external_host'] + ':' + str(config_dic['external_port'])
+    else:
+        host_domain = config_dic['external_host']
+    hidden_address = models.Emails.query.filter_by(db_user_id=current_user.id, email_hash=hashkey).first()
+    obfuscated_email = helpers.obfuscate_email(hidden_address.email)
+    return render_template("getinfo.html", hidden_addresses=obfuscated_email, hashkey=hashkey, host_domain=host_domain)
 
 
 # register here

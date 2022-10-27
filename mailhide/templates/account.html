@@ -24,7 +24,7 @@ Your email address(es) and their hash values.
 {% for address in hidden_addresses %}
 	<tr>
 		<td>{{address.email}}</td>
-		<td>{{address.email_hash}}</td>
+		<td><a href="/recover-link/{{address.email_hash}}">{{address.email_hash}}</a></td>
 	</tr>
 {% endfor %}
 </tbody>
@@ -37,5 +37,5 @@ Your email address(es) and their hash values.
 {% endblock %}
 
 {% block footer %}
-mailhide app by <a href="https://uryyb.net">bmcculley</a>.
+mailhide app by <a href="https://e42.xyz">bmcculley</a>.
 {% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+Hide your email address | Mailhide
+{% endblock %}
+
+{% block page_title %}
+Mailhide
+{% endblock %}
+
+{% block content %}
+<div id="url-holder">
+	<p>Let's keep a step ahead of the spammers. Here's your info:</p>
+	<label for="url">This is your hidden email url:</label>
+	<input type="text" id="url" value="//{{ host_domain }}/h/{{ hashkey }}">
+</div>
+<div id="code-holder" class="">
+	<p>This is an example link that opens a small window with your hidden address</p>
+	<p>Try it out:</p>
+	<span id="link-example"><a href="//{{ host_domain }}/h/{{ hashkey }}" onclick="window.open('//{{ host_domain }}/h/{{ hashkey }}', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=600'); return false;" title="Reveal this e-mail address">{{ hidden_addresses }}</a></span>
+	<p>Copy the code:</p>
+	<span id="code">&lt;a href="//{{ host_domain }}/h/{{ hashkey }}" onclick="window.open('//{{ host_domain }}/h/{{ hashkey }}', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=600'); return false;" title="Reveal this e-mail address"&gt;{{ hidden_addresses }}&lt;/a&gt;</span>
+</div>
+{% endblock %}
+
+{% block footer %}
+mailhide app by <a href="https://e42.xyz">bmcculley</a>.
+{% endblock %}
