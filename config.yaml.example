@@ -1,9 +1,11 @@
-debug: True
+debug: False
+external_host: "example.com"
+external_port: 80
 host: "127.0.0.1"
 port: 5000
 app_secret_key: "update_me"
 sqlalchemy_track_modifications: False
-sqlalchemy_database_uri: "sqlite:///users.db"
+sqlalchemy_database_uri: "sqlite:///mailhide.db"
 log_file: "mailhide.log"
 log_level: "NOTSET"
 

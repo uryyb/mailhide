@@ -10,6 +10,14 @@ def hash_email(addr):
 	# need to enable handling collisions
 	return hashlib.sha1(addr.encode()).hexdigest()
 
+def obfuscate_email(email_addr):
+	# should move this to it's own function
+    elst = email_addr.split("@")
+    if len(elst[0]) > 2:
+        return elst[0][0] + "...@" + elst[1]
+    else:
+        return "...@" + elst[1]
+
 def verify(private_key, response, client_ip):
 	recaptcha_url = "https://www.recaptcha.net/recaptcha/api/siteverify"
 	payload = {"secret":private_key,
